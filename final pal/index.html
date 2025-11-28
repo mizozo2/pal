@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pal: Stop Searching. Start Solving.</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Load Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <style>
+        /* Custom styles for the brand vibe (Deep Blue / Sky Blue Palette) */
+        :root {
+            --pal-primary: #1E40AF; /* Deep Blue / Logo Color */
+            --pal-accent: #3B82F6; /* Sky Blue Accent */
+            --pal-bg-light: #F9FAFB; /* Very Light Background */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--pal-bg-light);
+        }
+        /* Subtle background gradient for the overall page vibe */
+        .page-gradient {
+            background: linear-gradient(135deg, #FFFFFF 0%, #E5E7EB 100%);
+        }
+        /* Bold, gradient headline styling (Primary to Accent) */
+        .text-glow-up {
+            background-image: linear-gradient(90deg, var(--pal-primary), var(--pal-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 900;
+        }
+        /* CTA button glow effect */
+        .cta-button {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.5), 0 4px 6px -2px rgba(30, 64, 175, 0.25);
+        }
+        /* Input focus color to match the vibe */
+        .form-input:focus {
+            border-color: var(--pal-primary);
+            box-shadow: 0 0 0 3px rgba(60, 92, 246, 0.4);
+        }
+        /* Custom box shadow for cards */
+        .card-shadow {
+            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.05), 0 5px 8px -5px rgba(0, 0, 0, 0.03);
+        }
+        /* Simple fadeIn animation */
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Ensures the testimonial container handles scrolling gracefully */
+        .testimonial-carousel {
+            display: flex;
+            overflow-x: auto; 
+            scroll-snap-type: x mandatory; 
+            -webkit-overflow-scrolling: touch; 
+            gap: 1.5rem; 
+        }
+        .testimonial-item {
+            flex: 0 0 auto; 
+            width: 90%; /* Smaller width for mobile to show the next card */
+            scroll-snap-align: start; 
+        }
+        @media (min-width: 640px) {
+            .testimonial-item {
+                width: calc(50% - 0.75rem); /* Two items per row on medium screens */
+            }
+        }
+        @media (min-width: 1024px) {
+            .testimonial-item {
+                width: calc(33.333% - 1rem); /* Three items per row on large screens */
+            }
+        }
+        /* Styling for the FAQ accordion */
+        .faq-question {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+        }
+        .faq-answer.open {
+            max-height: 300px; /* Adjust based on content height */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        /* Custom modal styling */
+        .modal-overlay {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.open {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-content {
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+        .modal-overlay.open .modal-content {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="page-gradient min-h-screen flex flex-col antialiased">
+
+    <!-- Header / Nav (Sticky) -->
+    <header class="w-full p-4 md:p-6 bg-white/90 backdrop-blur-md sticky top-0 z-20 card-shadow">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Pal Logo - REVERTED TO TEXT PLACEHOLDER (FIXED LOGO ISSUE) -->
+            <div class="flex items-center space-x-2">
+                <!-- Reverted to the simple 'P' placeholder to solve the broken image issue -->
+                <div class="h-8 md:h-10 w-8 md:w-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">P</div>
+                <h1 class="text-3xl font-extrabold text-gray-800 hidden sm:block">
+                    Pal.
+                </h1>
+            </div>
+            
+            <a href="#quote-form" class="hidden sm:inline-block text-sm font-semibold text-blue-700 hover:text-blue-900 transition duration-150">
+                Send the Problem SOS 🚨
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
+            
+            <!-- Hero Section: The Core Value Proposition - Maximum Vibe -->
+            <section class="text-center mb-16 md:mb-24 fade-in">
+                <p class="text-lg md:text-xl font-medium text-blue-600 mb-4">
+                    Your current process is a flop. Time for a major glow up. ✨
+                </p>
+                <h2 class="text-5xl sm:text-7xl lg:text-8xl leading-tight font-extrabold mb-8">
+                    <span class="text-glow-up">Tell Us Your Drama.</span>
+                    <br class="hidden sm:block"> 
+                    <span class="text-gray-800">We Ship the App.</span>
+                </h2>
+                <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-10">
+                    If your day-to-day is giving 'struggle bus,' we're the main character energy you need. Pal custom-codes a perfect app to fix your specific trauma. No cap. 💅
+                </p>
+                <a href="#quote-form" class="cta-button inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-bold rounded-xl shadow-lg text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300">
+                    Bet. Let's Get This App Snatched. <i class="fas fa-magic ml-2"></i>
+                </a>
+            </section>
+
+            <!-- ********************************************** -->
+            <!-- ********** SECTION 1: OUR SOLUTIONS ********** -->
+            <!-- ********************************************** -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 0.2s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    Our Solutions: What Pal Custom-Codes
+                </h3>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    
+                    <div class="bg-white p-6 rounded-xl card-shadow text-center border-b-4 border-blue-500 hover:bg-blue-50 transition duration-300">
+                        <i class="fas fa-desktop text-4xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Internal Web Apps</h4>
+                        <p class="text-gray-600 text-sm">CRMs, Dashboards, and Management Systems that automate your office workflow.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl card-shadow text-center border-b-4 border-blue-500 hover:bg-blue-50 transition duration-300">
+                        <i class="fas fa-mobile-alt text-4xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Native Mobile Apps</h4>
+                        <p class="text-gray-600 text-sm">Building fast, secure apps for iOS (iPhone) and Android for customer or field use.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl card-shadow text-center border-b-4 border-blue-500 hover:bg-blue-50 transition duration-300">
+                        <i class="fas fa-robot text-4xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Automation & AI Tools</h4>
+                        <p class="text-gray-600 text-sm">Integrating AI or custom scripts to handle tedious data entry and repetitive tasks.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl card-shadow text-center border-b-4 border-blue-500 hover:bg-blue-50 transition duration-300">
+                        <i class="fas fa-boxes text-4xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-xl font-bold text-gray-800 mb-2">Logistics/Inventory</h4>
+                        <p class="text-gray-600 text-sm">Tools focused on scanning, tracking, and optimizing physical inventory and logistics.</p>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ************************************************ -->
+            <!-- ********** SECTION 2: CASE STUDIES *********** -->
+            <!-- ************************************************ -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 0.4s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    Case Studies: Problems Snatched. Periodt.
+                </h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    
+                    <!-- Case Study 1: Logistics Company -->
+                    <div class="bg-white p-8 rounded-xl card-shadow border-l-4 border-green-500">
+                        <h4 class="text-2xl font-bold text-gray-800 mb-3"><i class="fas fa-truck-ramp-box mr-2 text-green-500"></i> Logistics Tracking App</h4>
+                        <p class="text-sm text-gray-500 mb-4">**Client:** Regional Delivery Service</p>
+                        <h5 class="font-bold text-red-600 mb-2">THE DRAMA (PROBLEM):</h5>
+                        <p class="text-gray-600 mb-3">Drivers were using paper forms and manually texting updates, causing delivery delays and high error rates.</p>
+                        <h5 class="font-bold text-blue-600 mb-2">THE PAL SOLUTION:</h5>
+                        <p class="text-gray-600 mb-3">A dedicated PWA (mobile app) allowing real-time GPS tracking, digital signatures, and instant status updates.</p>
+                        <h5 class="font-bold text-green-600 mb-2">THE GLOW UP (RESULTS):</h5>
+                        <ul class="list-disc list-inside text-gray-700">
+                            <li>Delivery status time reduced by 90%.</li>
+                            <li>Eliminated all paperwork errors.</li>
+                            <li>Client satisfaction score increased by 15%.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Case Study 2: Sales Team Tool -->
+                    <div class="bg-white p-8 rounded-xl card-shadow border-l-4 border-yellow-500">
+                        <h4 class="text-2xl font-bold text-gray-800 mb-3"><i class="fas fa-chart-line mr-2 text-yellow-500"></i> Sales Dashboard Automation</h4>
+                        <p class="text-sm text-gray-500 mb-4">**Client:** Tech Sales Team of 15</p>
+                        <h5 class="font-bold text-red-600 mb-2">THE DRAMA (PROBLEM):</h5>
+                        <p class="text-gray-600 mb-3">Sales managers wasted 4 hours every Monday compiling reports from four different systems into one spreadsheet.</p>
+                        <h5 class="font-bold text-blue-600 mb-2">THE PAL SOLUTION:</h5>
+                        <p class="text-gray-600 mb-3">A simple, automated dashboard that pulls data from all sources (CRM, finance, inventory) and presents it instantly.</p>
+                        <h5 class="font-bold text-green-600 mb-2">THE GLOW UP (RESULTS):</h5>
+                        <ul class="list-disc list-inside text-gray-700">
+                            <li>4 hours of management time saved per week.</li>
+                            <li>Increased accuracy of sales forecasts.</li>
+                            <li>Managers can focus on coaching, not compiling.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- ************************************************* -->
+            <!-- ********** SECTION 3: DETAILED PROCESS ********** -->
+            <!-- ************************************************* -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 0.6s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    The Pal Process: Your Step-by-Step Glow Up
+                </h3>
+                <div class="grid md:grid-cols-5 gap-8 relative">
+                    
+                    <!-- Horizontal Line Connector (Desktop Only) -->
+                    <div class="absolute inset-0 hidden md:flex items-center justify-center pointer-events-none">
+                        <div class="w-full h-0.5 bg-gray-300 mx-10"></div>
+                    </div>
+                    
+                    <!-- Step 1: Vibe Check -->
+                    <div class="bg-white p-6 rounded-xl card-shadow text-center relative z-10 border-t-4 border-blue-700">
+                        <div class="w-12 h-12 rounded-full bg-blue-700 text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">1</div>
+                        <h4 class="text-lg font-bold text-gray-800 mb-2">Vibe Check & SOS</h4>
+                        <p class="text-gray-600 text-sm">You tell us your biggest pain point. We listen, diagnose the drama, and define the scope.</p>
+                    </div>
+                    
+                    <!-- Step 2: Strategy -->
+                    <div class="bg-white p-6 rounded-xl card-shadow text-center relative z-10 border-t-4 border-blue-600">
+                        <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">2</div>
+                        <h4 class="text-lg font-bold text-gray-800 mb-2">Strategy & Quote</h4>
+                        <p class="text-gray-600 text-sm">We prepare a clear plan, tech stack recommendation, and transparent, fixed quote. No hidden costs.</p>
+                    </div>
+                    
+                    <!-- Step 3: We Cook -->
+                    <div class="bg-white p-6 rounded-xl card-shadow text-center relative z-10 border-t-4 border-blue-500">
+                        <div class="w-12 h-12 rounded-full bg-blue-500 text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">3</div>
+                        <h4 class="text-lg font-bold text-gray-800 mb-2">Build & Iterate</h4>
+                        <p class="text-gray-600 text-sm">We custom-code the app with regular check-ins and demos. You see progress every week.</p>
+                    </div>
+                    
+                    <!-- Step 4: Launch -->
+                    <div class="bg-white p-6 rounded-xl card-shadow text-center relative z-10 border-t-4 border-blue-400">
+                        <div class="w-12 h-12 rounded-full bg-blue-400 text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">4</div>
+                        <h4 class="text-lg font-bold text-gray-800 mb-2">Launch & Train</h4>
+                        <p class="text-gray-600 text-sm">The app goes live! We provide training and documentation so your team is ready to slay.</p>
+                    </div>
+                    
+                    <!-- Step 5: Support -->
+                    <div class="bg-white p-6 rounded-xl card-shadow text-center relative z-10 border-t-4 border-blue-300">
+                        <div class="w-12 h-12 rounded-full bg-blue-300 text-white flex items-center justify-center text-xl font-bold mx-auto mb-4">5</div>
+                        <h4 class="text-lg font-bold text-gray-800 mb-2">Ongoing Support</h4>
+                        <p class="text-gray-600 text-sm">We provide a 90-day warranty and ongoing support to ensure your app keeps running smoothly.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Tech Stack Section: New Content -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 0.8s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    How We Cook: The Tech Stack (It Slays)
+                </h3>
+                <div class="grid md:grid-cols-4 gap-6">
+                    
+                    <!-- Tech 1: Frontend -->
+                    <div class="bg-white p-6 rounded-xl card-shadow border-l-4 border-blue-500 text-center">
+                        <i class="fas fa-laptop-code text-3xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-lg font-bold text-gray-800">Frontend Vibe</h4>
+                        <p class="text-sm text-gray-600">Clean, simple UI that makes sense. Think React/Vue and snatched Tailwind styling.</p>
+                    </div>
+
+                    <!-- Tech 2: Backend -->
+                    <div class="bg-white p-6 rounded-xl card-shadow border-l-4 border-blue-500 text-center">
+                        <i class="fas fa-server text-3xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-lg font-bold text-gray-800">Backend Power</h4>
+                        <p class="text-sm text-gray-600">The engine. Node.js or Python handling the complex logic. We use Firebase/Firestore for storage!</p>
+                    </div>
+
+                    <!-- Tech 3: Mobile -->
+                    <div class="bg-white p-6 rounded-xl card-shadow border-l-4 border-blue-500 text-center">
+                        <i class="fas fa-mobile-screen text-3xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-lg font-bold text-gray-800">Mobile Focus</h4>
+                        <p class="text-sm text-gray-600">If you need an app on the go, we build it with React Native/PWA for native speed and offline capability.</p>
+                    </div>
+
+                    <!-- Tech 4: Security -->
+                    <div class="bg-white p-6 rounded-xl card-shadow border-l-4 border-blue-500 text-center">
+                        <i class="fas fa-shield-halved text-3xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-lg font-bold text-gray-800">Data Safety</h4>
+                        <p class="text-sm text-gray-600">Your info is secure. We follow best practices to keep your data safe and sound. No leaks, period.</p>
+                    </div>
+
+                </div>
+            </section>
+            
+            <!-- Why Choose Pal: Direct comparison -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 1.0s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    Stop the Cap: Why Custom Apps Hit Different
+                </h3>
+                <div class="grid md:grid-cols-2 gap-8 bg-white p-8 rounded-2xl card-shadow">
+                    <div class="p-4 border-r md:border-r-2 border-gray-100">
+                        <h4 class="text-2xl font-bold mb-3 text-red-600"><i class="fas fa-face-woozy mr-2"></i> Generic Software (A whole mood 📉)</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                            <li>You're paying for features that are strictly not relevant.</li>
+                            <li>You have to do extra work to use the basic functions.</li>
+                            <li>It's giving "basic." Zero competitive edge.</li>
+                            <li>Customer service? I'm weak (LMAO).</li>
+                        </ul>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="text-2xl font-bold mb-3 text-green-600"><i class="fas fa-sparkles mr-2"></i> Pal's Custom App (Total Vibe Check 💯)</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-800">
+                            <li>Only the features that actually make sense. Money well spent.</li>
+                            <li>The app works *for* you, not the other way around.</li>
+                            <li>Unique app = instant flex on the competition.</li>
+                            <li>Direct access to your developers. Fast fixes, always.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials Section - Twitter/TikTok Style -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 1.2s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    Our Pals Are Not Lying (No Cap Testimonials)
+                </h3>
+                <div class="testimonial-carousel">
+                    
+                    <!-- Testimonial 1: Inventory Queen -->
+                    <div class="testimonial-item bg-white p-8 rounded-xl card-shadow border-b-4 border-blue-400">
+                        <i class="fas fa-quote-left text-blue-500 text-2xl mb-4"></i>
+                        <p class="text-gray-700 italic mb-6">"My entire inventory system was manual spreadsheets. Pal built a tiny, perfect scanning app in like 3 weeks. It's so clean. Life-saver. My team is thriving. 💯"</p>
+                        <div class="flex items-center">
+                            <!-- Custom Avatar: Initial 'A' (No Photo) -->
+                            <div class="w-12 h-12 rounded-full mr-4 flex items-center justify-center bg-blue-100 text-blue-700 font-bold text-xl ring-2 ring-blue-500">
+                                A
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">Amelia R. (Inventory Queen 👑)</p>
+                                <p class="text-sm text-gray-500">Warehouse Manager</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 2: Field King -->
+                    <div class="testimonial-item bg-white p-8 rounded-xl card-shadow border-b-4 border-blue-400">
+                        <i class="fas fa-quote-left text-blue-500 text-2xl mb-4"></i>
+                        <p class="text-gray-700 italic mb-6">"I needed a secure portal for client sign-offs on my site. Pal made a simple web app that works perfectly on mobile. Zero hassle. My business looks legit now. Slay."</p>
+                        <div class="flex items-center">
+                            <!-- Custom Avatar: Initial 'B' (No Photo) -->
+                            <div class="w-12 h-12 rounded-full mr-4 flex items-center justify-center bg-green-100 text-green-700 font-bold text-xl ring-2 ring-green-500">
+                                B
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">Ben K. (The Builder 🔨)</p>
+                                <p class="text-sm text-gray-500">Construction CEO</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 3: Finance Fairy -->
+                    <div class="testimonial-item bg-white p-8 rounded-xl card-shadow border-b-4 border-blue-400">
+                        <i class="fas fa-quote-left text-blue-500 text-2xl mb-4"></i>
+                        <p class="text-gray-700 italic mb-6">"My finance team was spending hours tracking expenses manually. Pal built an expense app that autofills everything. It's so streamlined, I'm actually happy during budget season. A whole mood, honestly."</p>
+                        <div class="flex items-center">
+                            <!-- Custom Avatar: Initial 'C' (No Photo) -->
+                            <div class="w-12 h-12 rounded-full mr-4 flex items-center justify-center bg-purple-100 text-purple-700 font-bold text-xl ring-2 ring-purple-500">
+                                C
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">Chloe L. (@FinanceFairy)</p>
+                                <p class="text-sm text-gray-500">Financial Analyst</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- FAQ Section: New Content -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 1.4s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    FAQ: Common Vibe Checks (Real Talk)
+                </h3>
+                <div class="max-w-4xl mx-auto bg-white rounded-xl card-shadow divide-y divide-gray-100">
+                    
+                    <!-- FAQ Item 1 -->
+                    <div class="faq-question p-5 rounded-t-xl hover:bg-gray-50 flex justify-between items-center" onclick="toggleAnswer(this)">
+                        <span class="text-lg font-semibold text-gray-800">Is this gonna cost me my entire savings?</span>
+                        <i class="fas fa-chevron-down text-blue-500 transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-5 text-gray-600">
+                        <p>No, bestie. We start with a free vibe check (consultation) to scope out the problem. We only build what you need, so you save money avoiding feature bloat. We provide a clear quote before we start cooking.</p>
+                    </div>
+
+                    <!-- FAQ Item 2 -->
+                    <div class="faq-question p-5 hover:bg-gray-50 flex justify-between items-center" onclick="toggleAnswer(this)">
+                        <span class="text-lg font-semibold text-gray-800">How long until I get my app? I need it ASAP.</span>
+                        <i class="fas fa-chevron-down text-blue-500 transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-5 text-gray-600">
+                        <p>It depends on the drama! A simple fix might be a few weeks, while a complex internal tool takes longer. We prioritize speed and deliverable quality. We'll give you a realistic timeline right after the initial diagnosis.</p>
+                    </div>
+
+                    <!-- FAQ Item 3 -->
+                    <div class="faq-question p-5 hover:bg-gray-50 flex justify-between items-center" onclick="toggleAnswer(this)">
+                        <span class="text-lg font-semibold text-gray-800">What if I need an update or a bug fix later?</span>
+                        <i class="fas fa-chevron-down text-blue-500 transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-5 text-gray-600">
+                        <p>We got you! Post-launch support and maintenance packages are available. We don't ghost after we deliver. We're your Pal, so we're here to make sure your app keeps slaying.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Final CTA Banner: New Content -->
+            <section class="mb-16 md:mb-24 p-8 md:p-12 bg-blue-700 rounded-2xl text-center fade-in" style="animation-delay: 1.6s;">
+                <h3 class="text-3xl md:text-5xl font-extrabold text-white mb-4">
+                    Still Reading? Your Problem Isn't Solving Itself.
+                </h3>
+                <p class="text-xl text-blue-200 mb-8">
+                    Let's stop searching for a fix and start building one. The app you need is a DM away.
+                </p>
+                <a href="#quote-form" class="cta-button inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-bold rounded-xl shadow-lg text-blue-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300">
+                    Seriously, Send the SOS. <i class="fas fa-bolt ml-2"></i>
+                </a>
+            </section>
+
+            <!-- QR Code Section for Mobile Users -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 1.8s;">
+                <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-2xl card-shadow">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div class="md:w-1/2 text-center md:text-left">
+                            <h3 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">
+                                On Your Phone? Install Our App.
+                            </h3>
+                            <p class="text-lg text-gray-600 mb-6">
+                                Save this page to your phone for easy access. No need to type the URL - just scan and go!
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                                <a href="#quote-form" class="cta-button inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-bold rounded-lg shadow-lg text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300">
+                                    Get Started Now <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 flex justify-center">
+                            <div class="bg-white p-4 rounded-xl border-2 border-blue-200 inline-block">
+                                <!-- QR Code Container -->
+                                <div id="qrcode" class="w-48 h-48 bg-gray-100 flex items-center justify-center text-gray-400">
+                                    <div class="text-center">
+                                        <i class="fas fa-qrcode text-4xl mb-2"></i>
+                                        <p class="text-sm">QR Code Loading...</p>
+                                    </div>
+                                </div>
+                                <p class="text-center text-sm text-gray-500 mt-2">Scan with your camera</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quote/Contact Form (The Call to Action) -->
+            <section id="quote-form" class="max-w-3xl mx-auto bg-white p-6 md:p-10 rounded-2xl card-shadow border-4 border-dashed border-blue-200 fade-in" style="animation-delay: 2.0s;">
+                <h3 class="text-3xl md:text-4xl font-extrabold text-center text-gray-800 mb-4">
+                    Don't Be Shy, Spill the Tea ☕ (Initial Vibe Check)
+                </h3>
+                <p class="text-lg text-center text-gray-600 mb-8">
+                    Send us your contact info and the chaos you need fixed. This is the first step before we send you the detailed *Pal form.docx* for the full scope.
+                </p>
+                
+                <form id="contactForm" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Your Name / Your Company's Vibe</label>
+                        <input type="text" id="name" name="name" required class="form-input w-full p-3 border border-gray-300 rounded-lg transition duration-150">
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Your Email (Where we can slide into your DMs)</label>
+                        <input type="email" id="email" name="email" placeholder="example@company.com" required class="form-input w-full p-3 border border-gray-300 rounded-lg transition duration-150">
+                    </div>
+
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Best Contact Number (Include Country Code)</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+1 (555) 555-5555" required class="form-input w-full p-3 border border-gray-300 rounded-lg transition duration-150">
+                    </div>
+
+                    <div>
+                        <label for="problem" class="block text-sm font-medium text-gray-700 mb-1">The Vibe Killer: Describe the chaos you need us to fix (Be specific! IYKYK.)</label>
+                        <textarea id="problem" name="problem" rows="4" required class="form-input w-full p-3 border border-gray-300 rounded-lg transition duration-150" placeholder="e.g., I need an app that lets my team scan a QR code on a package and automatically update the database. Right now it's all manual and I'm losing sleep over it."></textarea>
+                    </div>
+
+                    <button type="submit" class="cta-button w-full px-4 py-3 border border-transparent text-base font-bold rounded-lg shadow-lg text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300">
+                        Send the Problem SOS 🚨
+                    </button>
+                    
+                    <div id="statusMessage" class="hidden mt-4 p-3 rounded-lg text-center font-medium">
+                        <!-- Message appears here -->
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-gray-900 text-white mt-12 py-8 md:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <!-- Logo in Footer - REVERTED TO TEXT PLACEHOLDER (FIXED LOGO ISSUE) -->
+                    <div class="h-8 md:h-10 w-8 md:w-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg mx-auto md:mx-0 mb-3">P</div>
+                    <p class="text-gray-400 text-sm">
+                        We build custom apps that hit different. Your problem is valid, and we're here to solve it. Periodt.
+                    </p>
+                </div>
+                
+                <div>
+                    <h5 class="text-lg font-semibold mb-3 text-white">Slide Into Our DMs</h5>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <!-- Email updated with user's info and name -->
+                        <li><a href="mailto:mazeneltob2010@gmail.com" class="hover:text-blue-400 transition"><i class="fas fa-envelope mr-2"></i>Mazen Eltob (Support)</a></li>
+                        <!-- Phone link updated with user's info -->
+                        <li><a href="tel:+201010641727" class="hover:text-blue-400 transition"><i class="fas fa-phone-alt mr-2"></i>+201010641727</a></li>
+                        <!-- WhatsApp link updated with user's info -->
+                        <li><a href="https://wa.me/201010641727" target="_blank" class="hover:text-blue-400 transition"><i class="fab fa-whatsapp mr-2"></i>WhatsApp DM</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="text-lg font-semibold mb-3 text-white">Low Key Links</h5>
+                    <div class="flex justify-center md:justify-start space-x-4 text-xl">
+                        <a id="tiktok-share-link" href="https://www.tiktok.com/@your_pal_tiktok" target="_blank" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-tiktok"></i></a>
+                        <!-- Instagram link updated to the specific URL provided -->
+                        <a id="instagram-share-link" href="https://www.instagram.com/pal202590/" target="_blank" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-instagram"></i></a>
+                        <a id="twitter-share-link" href="https://twitter.com/your_pal_twitter" target="_blank" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-700 text-sm text-gray-500">
+                &copy; 2025 Pal Custom Solutions. All rights reserved. Go off!
+            </div>
+        </div>
+    </footer>
+
+    <!-- ************************************ -->
+    <!-- SUCCESS MODAL POP-UP (New Element) -->
+    <!-- ************************************ -->
+    <div id="successModal" class="modal-overlay fixed inset-0 z-50 bg-gray-900 bg-opacity-80 flex items-center justify-center p-4" onclick="hideSuccessModal()">
+        <div class="modal-content bg-white p-8 md:p-12 rounded-2xl shadow-2xl max-w-xl w-full text-center" onclick="event.stopPropagation()">
+            <div class="mb-6">
+                <i class="fas fa-check-circle text-6xl text-green-500 mb-4 animate-bounce"></i>
+                <h3 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">SOS Received! Slay. ✨</h3>
+                <p class="text-xl text-gray-600 font-medium">You just leveled up your workflow game.</p>
+            </div>
+            
+            <p class="text-gray-700 mb-8 leading-relaxed">
+                We saw your drama and we're already on it. Our Pal team will perform an initial **Vibe Check** and **contact you within the next 24 hours** via email or phone to discuss the solution. 
+            </p>
+
+            <h4 class="text-2xl font-bold text-blue-700 mb-4">What's Next?</h4>
+
+            <div class="space-y-4">
+                <!-- Share Button -->
+                <button onclick="sharePage()" class="cta-button w-full inline-flex items-center justify-center px-4 py-3 border border-transparent text-base font-bold rounded-lg shadow-md text-white bg-blue-500 hover:bg-blue-600 transition duration-300">
+                    <i class="fas fa-share-alt mr-2"></i> Share Pal with a Friend Who's Struggling
+                </button>
+                
+                <!-- Send Another SOS -->
+                <button onclick="sendAnotherSos()" class="w-full inline-flex items-center justify-center px-4 py-3 border border-blue-500 text-base font-bold rounded-lg shadow-md text-blue-700 bg-white hover:bg-gray-100 transition duration-300">
+                    Send Another SOS / Close <i class="fas fa-times ml-2"></i>
+                </button>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-gray-100">
+                <p class="text-sm text-gray-500 mb-2">Follow our journey and stay connected:</p>
+                <div class="flex justify-center space-x-4 text-2xl">
+                    <a href="https://www.tiktok.com/@your_pal_tiktok" target="_blank" class="text-gray-500 hover:text-blue-500 transition"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.instagram.com/pal202590/" target="_blank" class="text-gray-500 hover:text-blue-500 transition"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/your_pal_twitter" target="_blank" class="text-gray-500 hover:text-blue-500 transition"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- ************************************ -->
+    
+    <!-- Service Worker Registration (PWA) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js').then(registration => {
+                    console.log('SW registered: ', registration);
+                }).catch(registrationError => {
+                    console.log('SW registration failed: ', registrationError);
+                });
+            });
+        }
+    </script>
+
+    <script>
+        let deferredPrompt;
+        const form = document.getElementById('contactForm');
+        const statusMessage = document.getElementById('statusMessage');
+        const successModal = document.getElementById('successModal');
+
+        // --- MODAL CONTROL FUNCTIONS ---
+        function showSuccessModal() {
+            successModal.classList.add('open');
+        }
+
+        function hideSuccessModal() {
+            successModal.classList.remove('open');
+        }
+
+        function sendAnotherSos() {
+            form.reset();
+            hideSuccessModal();
+            // Scroll back to the form
+            document.getElementById('quote-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function sharePage() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.title,
+                    text: 'Stop searching for a software fix. Send the SOS to Pal! They custom-code the app you need.',
+                    url: window.location.href,
+                }).then(() => console.log('Successful share')).catch((error) => console.log('Error sharing', error));
+            } else {
+                // Fallback for browsers without navigator.share (desktop, older browsers)
+                document.getElementById('statusMessage').textContent = 'Please copy this link to share: ' + window.location.href;
+                document.getElementById('statusMessage').className = 'mt-4 p-3 rounded-lg text-center font-medium bg-gray-100 text-gray-700 block';
+            }
+        }
+
+        // --- INSTALL PROMPT LOGIC ---
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            console.log('PWA installation prompt ready.');
+        });
+        
+        function showInstallPrompt() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    } else {
+                        console.log('User dismissed the install prompt');
+                    }
+                    deferredPrompt = null; 
+                });
+            }
+        }
+
+        // --- Simple QR Code Implementation ---
+        function generateQRCode() {
+            const currentUrl = window.location.href;
+            const qrContainer = document.getElementById('qrcode');
+            
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(currentUrl)}`;
+            
+            const qrImage = document.createElement('img');
+            qrImage.src = qrCodeUrl;
+            qrImage.alt = "QR Code for this page";
+            qrImage.className = "w-full h-full";
+            
+            qrContainer.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin text-4xl mb-2 text-blue-600"></i><p class="text-sm">Loading QR...</p></div>';
+
+            qrImage.onload = function() {
+                qrContainer.innerHTML = '';
+                qrContainer.appendChild(qrImage);
+            };
+            
+            qrImage.onerror = function() {
+                qrContainer.innerHTML = `
+                    <div class="text-center">
+                        <i class="fas fa-qrcode text-4xl mb-2 text-red-600"></i>
+                        <p class="text-sm font-medium text-red-700">QR Error: Reload page</p>
+                        <p class="text-xs text-gray-500 mt-1 truncate w-40 mx-auto">${currentUrl}</p>
+                    </div>
+                `;
+            };
+        }
+
+        // --- FAQ Accordion Logic ---
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('.fa-chevron-down');
+
+            document.querySelectorAll('.faq-answer.open').forEach(openAnswer => {
+                if (openAnswer !== answer) {
+                    openAnswer.classList.remove('open');
+                    openAnswer.previousElementSibling.querySelector('.fa-chevron-down').classList.remove('rotate-180');
+                }
+            });
+
+            answer.classList.toggle('open');
+            icon.classList.toggle('rotate-180');
+        }
+
+        // --- Form Submission Logic (Formspree) ---
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            const formData = {
+                name: form.name.value,
+                email: form.email.value,
+                phone: form.phone.value,
+                problem: form.problem.value,
+                "_subject": "🚨 NEW SOS Vibe Check from Pal Website", 
+            };
+
+            const API_ENDPOINT = 'https://formspree.io/f/mvgjrvgz'; 
+
+            statusMessage.textContent = 'Sending the SOS... ⏳';
+            statusMessage.className = 'mt-4 p-3 rounded-lg text-center font-medium bg-blue-100 text-blue-700 block'; // Ensure it's block
+            submitButton.disabled = true;
+
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json' 
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                if (response.ok) {
+                    // SUCCESS: Hide inline message and show the custom modal
+                    statusMessage.classList.add('hidden');
+                    showSuccessModal();
+                } else {
+                    // FAILURE: Show inline message with error
+                    const errorData = await response.json();
+                    statusMessage.textContent = `Uh oh! Submission failed: ${errorData.errors ? errorData.errors[0].message : 'Unknown error.'}`;
+                    statusMessage.className = 'mt-4 p-3 rounded-lg text-center font-medium bg-red-100 text-red-700 block';
+                }
+            } catch (error) {
+                statusMessage.textContent = 'Network error. Please try again or reach out via WhatsApp.';
+                statusMessage.className = 'mt-4 p-3 rounded-lg text-center font-medium bg-red-100 text-red-700 block';
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+
+        // Execute functions when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            generateQRCode();
+            
+            // Wait a moment after loading to prompt the user (better UX)
+            setTimeout(() => {
+                showInstallPrompt();
+            }, 1000); 
+        });
+    </script>
+</body>
+</html>

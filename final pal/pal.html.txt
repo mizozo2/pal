@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pal: Stop Searching. Start Solving.</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Load Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom styles for the brand vibe (Deep Blue / Sky Blue Palette) */
+        :root {
+            --pal-primary: #1E40AF; /* Deep Blue / Logo Color */
+            --pal-accent: #3B82F6; /* Sky Blue Accent */
+            --pal-bg-light: #F9FAFB; /* Very Light Background */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--pal-bg-light);
+        }
+        /* Subtle background gradient for the overall page vibe */
+        .page-gradient {
+            background: linear-gradient(135deg, #FFFFFF 0%, #E5E7EB 100%);
+        }
+        /* Bold, gradient headline styling (Primary to Accent) */
+        .text-glow-up {
+            background-image: linear-gradient(90deg, var(--pal-primary), var(--pal-accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 900;
+        }
+        /* CTA button glow effect */
+        .cta-button {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.5), 0 4px 6px -2px rgba(30, 64, 175, 0.25);
+        }
+        /* Input focus color to match the vibe */
+        .form-input:focus {
+            border-color: var(--pal-primary);
+            box-shadow: 0 0 0 3px rgba(60, 92, 246, 0.4);
+        }
+        /* Custom box shadow for cards */
+        .card-shadow {
+            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.05), 0 5px 8px -5px rgba(0, 0, 0, 0.03);
+        }
+        /* Simple fadeIn animation */
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Ensures the testimonial container handles scrolling gracefully */
+        .testimonial-carousel {
+            display: flex;
+            overflow-x: auto; 
+            scroll-snap-type: x mandatory; 
+            -webkit-overflow-scrolling: touch; 
+            gap: 1.5rem; 
+        }
+        .testimonial-item {
+            flex: 0 0 auto; 
+            width: 90%; /* Smaller width for mobile to show the next card */
+            scroll-snap-align: start; 
+        }
+        @media (min-width: 640px) {
+            .testimonial-item {
+                width: calc(50% - 0.75rem); /* Two items per row on medium screens */
+            }
+        }
+        @media (min-width: 1024px) {
+            .testimonial-item {
+                width: calc(33.333% - 1rem); /* Three items per row on large screens */
+            }
+        }
+        /* Styling for the FAQ accordion */
+        .faq-question {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
+        }
+        .faq-answer.open {
+            max-height: 300px; /* Adjust based on content height */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="page-gradient min-h-screen flex flex-col antialiased">
+
+    <!-- Header / Nav (Sticky) -->
+    <header class="w-full p-4 md:p-6 bg-white/90 backdrop-blur-md sticky top-0 z-10 card-shadow">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Pal Logo -->
+            <div class="flex items-center space-x-2">
+                <div class="h-8 md:h-10 w-8 md:w-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg">P</div>
+                <h1 class="text-3xl font-extrabold text-gray-800 hidden sm:block">
+                    Pal.
+                </h1>
+            </div>
+            
+            <a href="#quote-form" class="hidden sm:inline-block text-sm font-semibold text-blue-700 hover:text-blue-900 transition duration-150">
+                Send the Problem SOS 🚨
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
+            
+            <!-- Hero Section: The Core Value Proposition - Maximum Vibe -->
+            <section class="text-center mb-16 md:mb-24 fade-in">
+                <p class="text-lg md:text-xl font-medium text-blue-600 mb-4">
+                    Your current process is a flop. Time for a major glow up. ✨
+                </p>
+                <h2 class="text-5xl sm:text-7xl lg:text-8xl leading-tight font-extrabold mb-8">
+                    <span class="text-glow-up">Tell Us Your Drama.</span>
+                    <br class="hidden sm:block"> 
+                    <span class="text-gray-800">We Ship the App.</span>
+                </h2>
+                <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-10">
+                    If your day-to-day is giving 'struggle bus,' we're the main character energy you need. Pal custom-codes a perfect app to fix your specific trauma. No cap. 💅
+                </p>
+                <a href="#quote-form" class="cta-button inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-bold rounded-xl shadow-lg text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300">
+                    Bet. Let's Get This App Snatched. <i class="fas fa-magic ml-2"></i>
+                </a>
+            </section>
+
+            <!-- Solution Process: Focused on the core model -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 0.2s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    The 3 Steps to Slaying Your Workflow
+                </h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    
+                    <!-- Step 1: Vibe Check -->
+                    <div class="bg-white p-8 rounded-xl card-shadow border-t-4 border-blue-700 transition hover:scale-[1.02] duration-300">
+                        <i class="fas fa-headset text-4xl block mb-4 text-blue-600"></i>
+                        <h4 class="text-xl font-bold mb-2 text-gray-800">1. Vibe Check: Spill the Tea ☕</h4>
+                        <p class="text-gray-600">You drop the details on your biggest headache—the slow system, the wasted time. We listen and get the full scope. IYKYK.</p>
+                    </div>
+                    
+                    <!-- Step 2: We Cook -->
+                    <div class="bg-white p-8 rounded-xl card-shadow border-t-4 border-blue-400 transition hover:scale-[1.02] duration-300">
+                        <i class="fas fa-kitchen-set text-4xl block mb-4 text-blue-600"></i>
+                        <h4 class="text-xl font-bold mb-2 text-gray-800">2. We Cook: Code That Slays 🔥</h4>
+                        <p class="text-gray-600">Our devs custom-codes a dedicated app (mobile, web, or internal tool) that fits your organization perfectly. Total customization.</p>
+                    </div>
+                    
+                    <!-- Step 3: Snatched -->
+                    <div class="bg-white p-8 rounded-xl card-shadow border-t-4 border-blue-700 transition hover:scale-[1.02] duration-300">
+                        <i class="fas fa-trophy text-4xl block mb-4 text-blue-600"></i>
+                        <h4 class="text-xl font-bold mb-2 text-gray-800">3. Problem Snatched. Periodt. 💅</h4>
+                        <p class="text-gray-600">The new app launches, your problems are ghosted, and your team is thriving. We keep the support chat open, always.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tech Stack Section: New Content -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 0.8s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    How We Cook: The Tech Stack (It Slays)
+                </h3>
+                <div class="grid md:grid-cols-4 gap-6">
+                    
+                    <!-- Tech 1: Frontend -->
+                    <div class="bg-white p-6 rounded-xl card-shadow border-l-4 border-blue-500 text-center">
+                        <i class="fas fa-laptop-code text-3xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-lg font-bold text-gray-800">Frontend Vibe</h4>
+                        <p class="text-sm text-gray-600">Clean, simple UI that makes sense. Think React/Vue and snatched Tailwind styling.</p>
+                    </div>
+
+                    <!-- Tech 2: Backend -->
+                    <div class="bg-white p-6 rounded-xl card-shadow border-l-4 border-blue-500 text-center">
+                        <i class="fas fa-server text-3xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-lg font-bold text-gray-800">Backend Power</h4>
+                        <p class="text-sm text-gray-600">The engine. Node.js or Python handling the complex logic. We use Firebase/Firestore for storage!</p>
+                    </div>
+
+                    <!-- Tech 3: Mobile -->
+                    <div class="bg-white p-6 rounded-xl card-shadow border-l-4 border-blue-500 text-center">
+                        <i class="fas fa-mobile-screen text-3xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-lg font-bold text-gray-800">Mobile Focus</h4>
+                        <p class="text-sm text-gray-600">If you need an app on the go, we build it with React Native/PWA for native speed and offline capability.</p>
+                    </div>
+
+                    <!-- Tech 4: Security -->
+                    <div class="bg-white p-6 rounded-xl card-shadow border-l-4 border-blue-500 text-center">
+                        <i class="fas fa-shield-halved text-3xl block mb-3 text-blue-600"></i>
+                        <h4 class="text-lg font-bold text-gray-800">Data Safety</h4>
+                        <p class="text-sm text-gray-600">Your info is secure. We follow best practices to keep your data safe and sound. No leaks, period.</p>
+                    </div>
+
+                </div>
+            </section>
+            
+            <!-- Why Choose Pal: Direct comparison -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 0.4s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    Stop the Cap: Why Custom Apps Hit Different
+                </h3>
+                <div class="grid md:grid-cols-2 gap-8 bg-white p-8 rounded-2xl card-shadow">
+                    <div class="p-4 border-r md:border-r-2 border-gray-100">
+                        <h4 class="text-2xl font-bold mb-3 text-red-600"><i class="fas fa-face-woozy mr-2"></i> Generic Software (A whole mood 📉)</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-600">
+                            <li>You're paying for features that are strictly not relevant.</li>
+                            <li>You have to do extra work to use the basic functions.</li>
+                            <li>It's giving "basic." Zero competitive edge.</li>
+                            <li>Customer service? I'm weak (LMAO).</li>
+                        </ul>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="text-2xl font-bold mb-3 text-green-600"><i class="fas fa-sparkles mr-2"></i> Pal's Custom App (Total Vibe Check 💯)</h4>
+                        <ul class="list-disc list-inside space-y-2 text-gray-800">
+                            <li>Only the features that actually make sense. Money well spent.</li>
+                            <li>The app works *for* you, not the other way around.</li>
+                            <li>Unique app = instant flex on the competition.</li>
+                            <li>Direct access to your developers. Fast fixes, always.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- FAQ Section: New Content -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 1.0s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    FAQ: Common Vibe Checks (Real Talk)
+                </h3>
+                <div class="max-w-4xl mx-auto bg-white rounded-xl card-shadow divide-y divide-gray-100">
+                    
+                    <!-- FAQ Item 1 -->
+                    <div class="faq-question p-5 rounded-t-xl hover:bg-gray-50 flex justify-between items-center" onclick="toggleAnswer(this)">
+                        <span class="text-lg font-semibold text-gray-800">Is this gonna cost me my entire savings?</span>
+                        <i class="fas fa-chevron-down text-blue-500 transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-5 text-gray-600">
+                        <p>No, bestie. We start with a free vibe check (consultation) to scope out the problem. We only build what you need, so you save money avoiding feature bloat. We provide a clear quote before we start cooking.</p>
+                    </div>
+
+                    <!-- FAQ Item 2 -->
+                    <div class="faq-question p-5 hover:bg-gray-50 flex justify-between items-center" onclick="toggleAnswer(this)">
+                        <span class="text-lg font-semibold text-gray-800">How long until I get my app? I need it ASAP.</span>
+                        <i class="fas fa-chevron-down text-blue-500 transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-5 text-gray-600">
+                        <p>It depends on the drama! A simple fix might be a few weeks, while a complex internal tool takes longer. We prioritize speed and deliverable quality. We'll give you a realistic timeline right after the initial diagnosis.</p>
+                    </div>
+
+                    <!-- FAQ Item 3 -->
+                    <div class="faq-question p-5 hover:bg-gray-50 flex justify-between items-center" onclick="toggleAnswer(this)">
+                        <span class="text-lg font-semibold text-gray-800">What if I need an update or a bug fix later?</span>
+                        <i class="fas fa-chevron-down text-blue-500 transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-answer px-5 text-gray-600">
+                        <p>We got you! Post-launch support and maintenance packages are available. We don't ghost after we deliver. We're your Pal, so we're here to make sure your app keeps slaying.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials Section - Twitter/TikTok Style -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 0.6s;">
+                <h3 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    Our Pals Are Not Lying (No Cap Testimonials)
+                </h3>
+                <div class="testimonial-carousel">
+                    
+                    <!-- Testimonial 1: Inventory Queen -->
+                    <div class="testimonial-item bg-white p-8 rounded-xl card-shadow border-b-4 border-blue-400">
+                        <i class="fas fa-quote-left text-blue-500 text-2xl mb-4"></i>
+                        <p class="text-gray-700 italic mb-6">"My entire inventory system was manual spreadsheets. Pal built a tiny, perfect scanning app in like 3 weeks. It's so clean. Life-saver. My team is thriving. 💯"</p>
+                        <div class="flex items-center">
+                            <!-- Custom Avatar: Initial 'A' (No Photo) -->
+                            <div class="w-12 h-12 rounded-full mr-4 flex items-center justify-center bg-blue-100 text-blue-700 font-bold text-xl ring-2 ring-blue-500">
+                                A
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">Amelia R. (Inventory Queen 👑)</p>
+                                <p class="text-sm text-gray-500">Warehouse Manager</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 2: Field King -->
+                    <div class="testimonial-item bg-white p-8 rounded-xl card-shadow border-b-4 border-blue-400">
+                        <i class="fas fa-quote-left text-blue-500 text-2xl mb-4"></i>
+                        <p class="text-gray-700 italic mb-6">"I needed a secure portal for client sign-offs on my site. Pal made a simple web app that works perfectly on mobile. Zero hassle. My business looks legit now. Slay."</p>
+                        <div class="flex items-center">
+                            <!-- Custom Avatar: Initial 'B' (No Photo) -->
+                            <div class="w-12 h-12 rounded-full mr-4 flex items-center justify-center bg-green-100 text-green-700 font-bold text-xl ring-2 ring-green-500">
+                                B
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">Ben K. (The Builder 🔨)</p>
+                                <p class="text-sm text-gray-500">Construction CEO</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 3: Finance Fairy -->
+                    <div class="testimonial-item bg-white p-8 rounded-xl card-shadow border-b-4 border-blue-400">
+                        <i class="fas fa-quote-left text-blue-500 text-2xl mb-4"></i>
+                        <p class="text-gray-700 italic mb-6">"My finance team was spending hours tracking expenses manually. Pal built an expense app that autofills everything. It's so streamlined, I'm actually happy during budget season. A whole mood, honestly."</p>
+                        <div class="flex items-center">
+                            <!-- Custom Avatar: Initial 'C' (No Photo) -->
+                            <div class="w-12 h-12 rounded-full mr-4 flex items-center justify-center bg-purple-100 text-purple-700 font-bold text-xl ring-2 ring-purple-500">
+                                C
+                            </div>
+                            <div>
+                                <p class="font-bold text-gray-800">Chloe L. (@FinanceFairy)</p>
+                                <p class="text-sm text-gray-500">Financial Analyst</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Final CTA Banner: New Content -->
+            <section class="mb-16 md:mb-24 p-8 md:p-12 bg-blue-700 rounded-2xl text-center fade-in" style="animation-delay: 1.2s;">
+                <h3 class="text-3xl md:text-5xl font-extrabold text-white mb-4">
+                    Still Reading? Your Problem Isn't Solving Itself.
+                </h3>
+                <p class="text-xl text-blue-200 mb-8">
+                    Let's stop searching for a fix and start building one. The app you need is a DM away.
+                </p>
+                <a href="#quote-form" class="cta-button inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-bold rounded-xl shadow-lg text-blue-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300">
+                    Seriously, Send the SOS. <i class="fas fa-bolt ml-2"></i>
+                </a>
+            </section>
+
+            <!-- QR Code Section for Mobile Users -->
+            <section class="mb-16 md:mb-24 fade-in" style="animation-delay: 1.3s;">
+                <div class="max-w-4xl mx-auto bg-white p-8 md:p-12 rounded-2xl card-shadow">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div class="md:w-1/2 text-center md:text-left">
+                            <h3 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4">
+                                On Your Phone? Scan This.
+                            </h3>
+                            <p class="text-lg text-gray-600 mb-6">
+                                Save this page to your phone for easy access. No need to type the URL - just scan and go!
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                                <a href="#quote-form" class="cta-button inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-bold rounded-lg shadow-lg text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300">
+                                    Get Started Now <i class="fas fa-arrow-right ml-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 flex justify-center">
+                            <div class="bg-white p-4 rounded-xl border-2 border-blue-200 inline-block">
+                                <!-- QR Code Container -->
+                                <div id="qrcode" class="w-48 h-48 bg-gray-100 flex items-center justify-center text-gray-400">
+                                    <div class="text-center">
+                                        <i class="fas fa-qrcode text-4xl mb-2"></i>
+                                        <p class="text-sm">QR Code Loading...</p>
+                                    </div>
+                                </div>
+                                <p class="text-center text-sm text-gray-500 mt-2">Scan with your camera</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quote/Contact Form (The Call to Action) -->
+            <section id="quote-form" class="max-w-3xl mx-auto bg-white p-6 md:p-10 rounded-2xl card-shadow border-4 border-dashed border-blue-200 fade-in" style="animation-delay: 1.4s;">
+                <h3 class="text-3xl md:text-4xl font-extrabold text-center text-gray-800 mb-4">
+                    Don't Be Shy, Spill the Tea ☕ (Initial Vibe Check)
+                </h3>
+                <p class="text-lg text-center text-gray-600 mb-8">
+                    Send us your contact info and the chaos you need fixed. This is the first step before we send you the detailed *Pal form.docx* for the full scope.
+                </p>
+                
+                <form id="contactForm" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Your Name / Your Company's Vibe</label>
+                        <input type="text" id="name" name="name" required class="form-input w-full p-3 border border-gray-300 rounded-lg transition duration-150">
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Your Email (Where we can slide into your DMs)</label>
+                        <!-- Email input placeholder remains generic -->
+                        <input type="email" id="email" name="email" placeholder="example@company.com" required class="form-input w-full p-3 border border-gray-300 rounded-lg transition duration-150">
+                    </div>
+
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Best Contact Number (Include Country Code)</label>
+                        <!-- Phone input placeholder remains generic -->
+                        <input type="tel" id="phone" name="phone" placeholder="+1 (555) 555-5555" required class="form-input w-full p-3 border border-gray-300 rounded-lg transition duration-150">
+                    </div>
+
+                    <div>
+                        <label for="problem" class="block text-sm font-medium text-gray-700 mb-1">The Vibe Killer: Describe the chaos you need us to fix (Be specific! IYKYK.)</label>
+                        <textarea id="problem" name="problem" rows="4" required class="form-input w-full p-3 border border-gray-300 rounded-lg transition duration-150" placeholder="e.g., I need an app that lets my team scan a QR code on a package and automatically update the database. Right now it's all manual and I'm losing sleep over it."></textarea>
+                    </div>
+
+                    <button type="submit" class="cta-button w-full px-4 py-3 border border-transparent text-base font-bold rounded-lg shadow-lg text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-300">
+                        Send the Problem SOS 🚨
+                    </button>
+                    
+                    <!-- statusMessage changed to display success/error feedback -->
+                    <div id="statusMessage" class="hidden mt-4 p-3 rounded-lg text-center font-medium">
+                        <!-- Message appears here -->
+                    </div>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-gray-900 text-white mt-12 py-8 md:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <!-- Logo in Footer -->
+                    <div class="h-8 md:h-10 w-8 md:w-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg mx-auto md:mx-0 mb-3">P</div>
+                    <p class="text-gray-400 text-sm">
+                        We build custom apps that hit different. Your problem is valid, and we're here to solve it. Periodt.
+                    </p>
+                </div>
+                
+                <div>
+                    <h5 class="text-lg font-semibold mb-3 text-white">Slide Into Our DMs</h5>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <!-- Email updated with user's info and name -->
+                        <li><a href="mailto:mazeneltob2010@gmail.com" class="hover:text-blue-400 transition"><i class="fas fa-envelope mr-2"></i>Mazen Eltob (Support)</a></li>
+                        <!-- Phone link updated with user's info -->
+                        <li><a href="tel:+201010641727" class="hover:text-blue-400 transition"><i class="fas fa-phone-alt mr-2"></i>+201010641727</a></li>
+                        <!-- WhatsApp link updated with user's info -->
+                        <li><a href="https://wa.me/201010641727" target="_blank" class="hover:text-blue-400 transition"><i class="fab fa-whatsapp mr-2"></i>WhatsApp DM</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h5 class="text-lg font-semibold mb-3 text-white">Low Key Links</h5>
+                    <div class="flex justify-center md:justify-start space-x-4 text-xl">
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-tiktok"></i></a>
+                        <!-- Instagram link updated to the specific URL provided -->
+                        <a href="https://www.instagram.com/pal202590/" target="_blank" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-700 text-sm text-gray-500">
+                &copy; 2025 Pal Custom Solutions. All rights reserved. Go off!
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Simple QR Code Implementation ---
+        function generateQRCode() {
+            const currentUrl = window.location.href;
+            const qrContainer = document.getElementById('qrcode');
+            
+            // Use a QR code generator API as a simple solution
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(currentUrl)}`;
+            
+            // Create an image element for the QR code
+            const qrImage = document.createElement('img');
+            qrImage.src = qrCodeUrl;
+            qrImage.alt = "QR Code for this page";
+            qrImage.className = "w-full h-full";
+            
+            // Add loading state
+            qrImage.onload = function() {
+                qrContainer.innerHTML = '';
+                qrContainer.appendChild(qrImage);
+            };
+            
+            // Handle errors
+            qrImage.onerror = function() {
+                qrContainer.innerHTML = `
+                    <div class="text-center">
+                        <i class="fas fa-qrcode text-4xl mb-2 text-blue-600"></i>
+                        <p class="text-sm font-medium text-blue-700">Scan to save</p>
+                        <p class="text-xs text-gray-500 mt-1 truncate w-40 mx-auto">${currentUrl}</p>
+                    </div>
+                `;
+            };
+            
+            // Set the initial content to loading
+            qrContainer.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin text-4xl mb-2 text-blue-600"></i><p class="text-sm">Loading QR...</p></div>';
+            qrContainer.appendChild(qrImage);
+        }
+
+        // --- Form Submission Logic ---
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const statusMessage = document.getElementById('statusMessage');
+            
+            // 1. Collect form data
+            const formData = {
+                name: form.name.value,
+                email: form.email.value,
+                phone: form.phone.value,
+                problem: form.problem.value,
+            };
+
+            const API_ENDPOINT = 'https://formspree.io/f/mvgjrvgz';
+
+            statusMessage.textContent = 'Sending the SOS... ⏳';
+            statusMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700');
+            statusMessage.classList.add('bg-blue-100', 'text-blue-700');
+
+            try {
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json' 
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                if (response.ok) {
+                    statusMessage.textContent = 'Message sent! We saw that! Pal is already on it. We will send the Pal form.docx next. Talk soon. 🤘';
+                    statusMessage.classList.remove('bg-blue-100', 'text-blue-700');
+                    statusMessage.classList.add('bg-green-100', 'text-green-700');
+                    
+                    form.name.value = '';
+                    form.problem.value = '';
+                } else {
+                    statusMessage.textContent = `Error sending request. Status: ${response.status}. Try WhatsApp instead? 😭`;
+                    statusMessage.classList.remove('bg-blue-100', 'text-blue-700');
+                    statusMessage.classList.add('bg-red-100', 'text-red-700');
+                }
+
+            } catch (error) {
+                console.error('Network or Fetch Error:', error);
+                statusMessage.textContent = 'Network fail. Try again later or hit us up on WhatsApp. 🥺';
+                statusMessage.classList.remove('bg-blue-100', 'text-blue-700');
+                statusMessage.classList.add('bg-red-100', 'text-red-700');
+            }
+            
+            setTimeout(() => {
+                statusMessage.classList.add('hidden');
+                statusMessage.classList.remove('bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700', 'bg-blue-100', 'text-blue-700');
+            }, 6000);
+        });
+
+        // --- Smooth Scrolling Logic ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const targetId = this.getAttribute('href');
+                if (targetId && targetId.length > 1) {
+                    e.preventDefault();
+                    document.querySelector(targetId).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // --- FAQ Accordion Logic ---
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('.fa-chevron-down');
+            
+            document.querySelectorAll('.faq-answer.open').forEach(openAnswer => {
+                if (openAnswer !== answer) {
+                    openAnswer.classList.remove('open');
+                    openAnswer.previousElementSibling.querySelector('.fa-chevron-down').classList.remove('rotate-180');
+                }
+            });
+
+            answer.classList.toggle('open');
+            icon.classList.toggle('rotate-180');
+            element.classList.toggle('bg-gray-100');
+        }
+        window.toggleAnswer = toggleAnswer;
+
+        // --- Fade-in Animation Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Generate QR code when page loads
+            generateQRCode();
+            
+            const sections = document.querySelectorAll('.fade-in');
+            sections.forEach(section => {
+                const delayMatch = section.style.animationDelay ? section.style.animationDelay : '0s';
+                section.dataset.delay = delayMatch;
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.animation = 'none';
+            });
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = `fadeIn 1s ease-out forwards ${entry.target.dataset.delay}`;
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+        
+    </script>
+    <script>
+    // --- Simple QR Code Implementation ---
+    function generateQRCode() {
+        // Use window.location.href to get the live Netlify URL
+        const currentUrl = window.location.href;
+        const qrContainer = document.getElementById('qrcode');
+        
+        // Use a QR code generator API (Note: This relies on an external service)
+        const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(currentUrl)}`;
+        
+        // Create an image element for the QR code
+        const qrImage = document.createElement('img');
+        qrImage.src = qrCodeUrl;
+        qrImage.alt = "QR Code for this page";
+        qrImage.className = "w-full h-full";
+        
+        // Add loading state
+        qrContainer.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin text-4xl mb-2 text-blue-600"></i><p class="text-sm">Loading QR...</p></div>';
+
+        qrImage.onload = function() {
+            qrContainer.innerHTML = ''; // Clear loading spinner
+            qrContainer.appendChild(qrImage);
+        };
+        
+        // Handle errors
+        qrImage.onerror = function() {
+            qrContainer.innerHTML = `
+                <div class="text-center">
+                    <i class="fas fa-qrcode text-4xl mb-2 text-red-600"></i>
+                    <p class="text-sm font-medium text-red-700">QR Error: Reload page</p>
+                    <p class="text-xs text-gray-500 mt-1 truncate w-40 mx-auto">${currentUrl}</p>
+                </div>
+            `;
+        };
+    }
+
+    // --- FAQ Accordion Logic ---
+    function toggleAnswer(element) {
+        const answer = element.nextElementSibling;
+        const icon = element.querySelector('.fa-chevron-down');
+
+        // Close all other open answers
+        document.querySelectorAll('.faq-answer.open').forEach(openAnswer => {
+            if (openAnswer !== answer) {
+                openAnswer.classList.remove('open');
+                openAnswer.previousElementSibling.querySelector('.fa-chevron-down').classList.remove('rotate-180');
+            }
+        });
+
+        // Toggle the clicked answer
+        answer.classList.toggle('open');
+        icon.classList.toggle('rotate-180');
+    }
+
+    // --- Form Submission Logic (Formspree) ---
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const form = e.target;
+        const statusMessage = document.getElementById('statusMessage');
+        const submitButton = form.querySelector('button[type="submit"]');
+        
+        const formData = {
+            name: form.name.value,
+            email: form.email.value,
+            phone: form.phone.value,
+            problem: form.problem.value,
+            // Include a helpful identifier for your Formspree inbox
+            "_subject": "🚨 NEW SOS Vibe Check from Pal Website", 
+        };
+
+        const API_ENDPOINT = 'https://formspree.io/f/mvgjrvgz'; // <--- Ensure this Formspree ID is VERIFIED!
+
+        // Show sending status
+        statusMessage.textContent = 'Sending the SOS... ⏳';
+        statusMessage.className = 'mt-4 p-3 rounded-lg text-center font-medium bg-blue-100 text-blue-700';
+        submitButton.disabled = true; // Prevent multiple clicks
+
+        try {
+            const response = await fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json' 
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (response.ok) {
+                // Success message
+                statusMessage.textContent = 'Message sent! We saw that! Pal is already on it. We will be in touch within 24 hours. ✅';
+                statusMessage.className = 'mt-4 p-3 rounded-lg text-center font-medium bg-green-100 text-green-700';
+                form.reset(); // Clear the form fields
+            } else {
+                // Handle submission failure
+                const errorData = await response.json();
+                statusMessage.textContent = `Uh oh! Submission failed: ${errorData.errors ? errorData.errors[0].message : 'Unknown error.'}`;
+                statusMessage.className = 'mt-4 p-3 rounded-lg text-center font-medium bg-red-100 text-red-700';
+            }
+        } catch (error) {
+            // Handle network or other general errors
+            statusMessage.textContent = 'Network error. Please try again or reach out via WhatsApp.';
+            statusMessage.className = 'mt-4 p-3 rounded-lg text-center font-medium bg-red-100 text-red-700';
+        } finally {
+            submitButton.disabled = false; // Re-enable the button
+        }
+    });
+
+    // Execute functions when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        generateQRCode();
+    });
+</script>
+</body>
+</html>
